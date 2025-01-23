@@ -279,6 +279,8 @@ The training and validation performance demonstrates that the model successfully
 
 ### 5.2 Evaluation Metrics
 
+**!!! Note: It was observed that the following metrics were better when the model was trained further.**
+
 Evaluation metrics are critical in assessing the performance of a machine learning model, particularly in a project as sensitive as detecting depressive and suicidal tendencies. These metrics provide insights into the model's capability to generalize and classify instances correctly. For this project, accuracy, precision, recall, F1 score, specificity, and AUC-ROC were used to evaluate the model's effectiveness, and confusion matrices were constructed to analyze class-level performance.
 
 **Accuracy**
