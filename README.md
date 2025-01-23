@@ -1,4 +1,4 @@
-# Depression Detection
+# DEPRESSION DETECTION
 
 **GAZI UNIVERSITY**
 **FACULTY OF ENGINEERING**
@@ -42,7 +42,40 @@ The primary objective of this project is to develop an automated system capable 
 
 ## 3. METHODOLOGY
 
-### 3.1 Feature Extraction
+### 3.1 Dataset Preparation
+
+Dataset preparation was a foundational step in this project, ensuring that the data used for training and evaluation was of high quality and relevant to the project's objectives. Several datasets were utilized, each bringing unique contributions to the study:
+
+1.	**Reddit Dataset (r/Depression and r/SuicideWatch):** This dataset includes posts from Reddit communities specifically focused on mental health topics like depression and suicide. The data is invaluable for identifying patterns in textual content that signify mental health struggles [8].
+2.	**Depression Reddit Cleaned Dataset:** This dataset consists of pre-processed and labeled Reddit posts related to depression. It reduced the need for extensive preprocessing, providing a cleaner foundation for analysis and model training [9].
+3.	**Suicide and Depression Detection Dataset:** Sourced from Hugging Face, this dataset contains labeled data for detecting depression and suicidal tendencies. It aligns well with the project's focus on classification and analysis of mental health-related text [10].
+4.	**Reddit Conversations Dataset:** This dataset contains general conversations from Reddit, offering diverse context and linguistic patterns to improve the robustness of the model [11].
+5.	**Daily Dialog Dataset:** This dataset contains daily conversations, taken from lukasgarbas' nlp-text-emotion repository on GitHub [12].
+
+**Data Cleaning and Preprocessing**
+
+To ensure the datasets were suitable for training deep learning models, the following steps were taken:
+1.	**Stopword Removal:** Words that do not contribute significant semantic meaning, such as "the" and "and," were removed to enhance the relevance of the text.
+2.	**Tokenization:** Text was tokenized using the BERT tokenizer, which breaks text into smaller components (tokens) while preserving semantic meaning. This step is crucial for deep learning models to process text effectively.
+3.	**Text Normalization:** All text was converted to lowercase, and non-alphanumeric characters were removed to maintain uniformity.
+4.	**Label Mapping:** Text labels (neutral, Depression, SuicideWatch) were mapped to numerical values (0, 1, 2) to facilitate compatibility with machine learning models.
+5.	**Data Reduction:** There was about 400,000 - 450,0000 pieces of data in total. But training this amount of data was very time consuming. Therefore, training was performed with about 150,000 data using 1/3 of the data. After various preprocessing operations, there are about 42,000 data per label (neutral, depression and SuicideWatch).
+
+**Balancing Class Distribution**
+
+The datasets exhibited class imbalance, with neutral posts significantly outnumbering depressive and suicidal posts. To mitigate this issue, the following strategies were employed:
+- **Oversampling:** Depressive and suicidal posts were oversampled to match the number of neutral posts. This technique involved duplicating existing samples in the minority classes [9, 10].
+- **Shuffling:** After oversampling, the dataset was shuffled to randomize the distribution and minimize training bias [8].
+
+**Ethical Consideration**s
+
+Given the sensitive nature of the data, ethical guidelines were followed throughout the project. Only publicly available datasets were used, and all personally identifiable information was excluded to protect individuals' privacy. This aligns with best practices for ethical research in mental health and artificial intelligence [4, 8].
+
+**Summary**
+
+In conclusion, dataset preparation included sourcing data from reliable repositories, applying rigorous cleaning and preprocessing methods, and implementing strategies to address class imbalance. These steps established a solid foundation for the subsequent phases of model training and evaluation. 
+
+### 3.2 Feature Extraction
 
 Feature extraction played a pivotal role in this project by allowing us to leverage diverse linguistic, psychological, and contextual features for detecting depression and suicidal tendencies. This multifaceted approach ensured the model could capture both the explicit and subtle markers of mental health conditions in text.
 
@@ -74,11 +107,11 @@ The combination of sentiment scores, psycholinguistic markers, and transformer e
 
 By integrating these diverse feature types, the project not only enhanced classification accuracy but also addressed the limitations of relying solely on deep learning or rule-based approaches, offering a balanced and interpretable solution to a critical societal challenge.
 
-### 3.2 Model Architecture
+### 3.3 Model Architecture
 
 The architecture of the Fusion Model was designed to integrate the power of transformer-based contextual embeddings with handcrafted linguistic features, enabling effective classification of text into neutral, depressive, or suicidal categories. This hybrid design leverages pre-trained transformer models for their ability to capture semantic and syntactic nuances, while the additional features enhance interpretability by incorporating psycholinguistic and sentiment-based insights.
 
-#### 3.2.1 Transformer Layer
+#### 3.3.1 Transformer Layer
 
 The foundation of the Fusion Model is a pre-trained transformer, specifically the BERT model (bert-base-uncased). This layer provides context-aware embeddings for input text.
 - **Functionality:**
@@ -86,7 +119,7 @@ The foundation of the Fusion Model is a pre-trained transformer, specifically th
   - Extracts a fixed-length embedding from the [CLS] token, representing the entire input text's semantic meaning.
   - The transformer layer's parameters are fine-tuned during training to adapt to the specific task.
 
-#### 3.2.2 What is BERT?
+#### 3.3.2 What is BERT?
 
 Traditional language models often rely on unidirectional context, either processing text from left-to-right or right-to-left. This approach limits the ability to fully utilize surrounding context for understanding words within sentences. BERT addresses this limitation by employing a bidirectional training mechanism, enabling the model to learn context from both the left and right sides of a word simultaneously [13].
 
@@ -94,7 +127,7 @@ Traditional language models often rely on unidirectional context, either process
 - Deep Bidirectional Training: Unlike models such as OpenAI GPT, BERT uses a "masked language model" (MLM) objective, allowing the representation to incorporate context from all directions.
 - Fine-Tuning Versatility: With minimal task-specific architecture modifications, BERT can be fine-tuned for a wide array of NLP tasks, such as question answering, sentiment analysis, and named entity recognition (NER).
 
-##### 3.2.2.1 Architecture of BERT
+##### 3.3.2.1 Architecture of BERT
 
 BERT's architecture is based on the Transformer encoder introduced by Vaswani et al. (2017). It uses multiple layers of self-attention and feed-forward neural networks to capture relationships between words in a sentence [13].
 
@@ -109,7 +142,9 @@ BERT’s input representation unifies single sentences and sentence pairs into a
 
 ![image](https://github.com/user-attachments/assets/c4a77c6a-6315-42d0-90c4-90769985b517)
 
-##### 3.2.2.2. Pre-Training Objectives
+*Figure 3.3.2.1.1: BERT*
+
+##### 3.3.2.2. Pre-Training Objectives
 
 BERT is pre-trained on vast amounts of unlabeled text using two key tasks [13]:
 
@@ -122,7 +157,7 @@ BERT is pre-trained on vast amounts of unlabeled text using two key tasks [13]:
 - BERT is trained to predict whether one sentence logically follows another.
 - This task aids in understanding relationships between sentences, crucial for applications like question answering.
 
-##### 3.2.2.3. Fine-Tuning
+##### 3.3.2.3. Fine-Tuning
 
 Fine-tuning BERT involves adding a task-specific output layer and training the entire model end-to-end on labeled data. For example [13]:
 - Question Answering: Predicting start and end tokens of an answer in a passage.
@@ -130,6 +165,8 @@ Fine-tuning BERT involves adding a task-specific output layer and training the e
 - Sequence Labeling: Leveraging token-level embeddings for tasks like NER.
 
 ![image](https://github.com/user-attachments/assets/48a5a83f-c293-4fa4-9208-b6c66578ad80)
+
+*Figure *.3.2.3.1: Fine-Tuning BERT*
 
 **Fusion Layer**
 
@@ -173,7 +210,7 @@ The architecture efficiently integrates deep semantic features from the transfor
 
 By integrating deep learning with domain-specific handcrafted features, the Fusion Model bridges the gap between advanced NLP techniques and interpretable linguistic cues, ensuring effective classification of mental health indicators.
 
-### 3.3 Training and Hyperparameter Tuning
+### 3.4 Training and Hyperparameter Tuning
 The training and hyperparameter tuning process combines state-of-the-art techniques such as AdamW optimization, linear warm-up scheduling, and mixed-precision training to ensure efficient and accurate learning. Systematic tuning through grid search and cross-validation enhances the model's generalizability, making it robust in detecting depression and suicidal ideation across diverse text inputs.
 
 
@@ -358,6 +395,63 @@ The confusion matrix for the BERT model showed a more balanced performance acros
 
 **Conclusion**
 The comparative analysis confirms that the BERT-based fusion model significantly outperforms the baseline models. Its ability to incorporate linguistic, contextual, and additional psycholinguistic features makes it a superior choice for detecting depressive and suicidal ideation in social media posts. This highlights the importance of advanced architectures in tackling complex mental health-related text classification tasks.
+
+## 6. CONCLUSION
+
+This project aimed to create a robust text classification system capable of detecting depressive and suicidal ideation in social media posts. By leveraging state-of-the-art techniques in natural language processing (NLP) and machine learning, the project successfully demonstrated the effectiveness of a BERT-based fusion model in addressing this critical societal challenge.
+
+**Key Findings and Achievements**
+- **Model Performance:** The BERT-based fusion model achieved a high accuracy of 83.68% and a macro-averaged AUC-ROC of 94.79%, outperforming traditional baseline models such as Logistic Regression and Support Vector Machines (SVM).
+- **Class-Specific Insights:** The model showed notable performance in distinguishing between neutral, depressive, and suicidal posts, with precision and recall scores consistently higher than the baselines. This highlights the model's ability to identify subtle nuances in mental health-related language.
+- **Feature Integration:** The integration of transformer embeddings with psycholinguistic and sentiment features enhanced the model's ability to capture both contextual and emotional aspects of the text.
+- **Balanced Dataset:** The use of advanced resampling techniques ensured a balanced dataset, reducing bias and improving the model's generalizability across classes.
+
+**Societal Impact and Future Applications**
+- **Mental Health Support:** This project underscores the potential of machine learning to assist mental health professionals by providing early warnings for depressive or suicidal tendencies based on social media activity. This could lead to timely interventions and potentially save lives.
+- **Scalability:** The model can be scaled and adapted for other languages, demographics, or social media platforms, broadening its reach and impact.
+- **Integration in Support Systems:** Future implementations could integrate the model into helpline systems, mobile apps, or social media platforms to provide real-time monitoring and support for at-risk individuals.
+
+**Reflection on Success**
+
+The project successfully met its objectives of designing and implementing a reliable classification system for detecting mental health signals in text. Despite challenges such as data imbalance and training complexity, the final model demonstrated exceptional performance and practical applicability. This project not only contributes to the growing field of AI-driven mental health detection but also lays a strong foundation for future research and development in this area.
+
+**Future Directions**
+
+To further enhance the project's impact:
+1.	**Advanced Linguistic Features:** Incorporating features like sarcasm detection and emotion classification could improve the model's ability to handle complex text patterns.
+2.	**Real-Time Deployment:** Implementing the model in real-world settings with real-time feedback mechanisms could make it more actionable.
+3.	**Ethical Considerations:** Addressing ethical concerns around data privacy and model biases will be critical to building trust and ensuring responsible use of the technology.
+
+In conclusion, this project demonstrated the transformative potential of AI in tackling mental health challenges, providing a valuable tool for both researchers and practitioners. By bridging the gap between technology and mental health, it paves the way for impactful advancements in this critical domain.
+
+## 7. REFERENCES
+
+[1] Al-Mosaiwi, M., & Johnstone, T. (2018). In an absolute state: Elevated use of absolutist words is a marker specific to anxiety, depression, and suicidal ideation. Clinical Psychological Science, 6(4), 529-542.
+
+[2] Sawhney, R., Joshi, H., & Gandhi, U. (2020). A computational approach to detecting and analyzing suicidal tendencies on social media. Social Network Analysis and Mining, 10(1), 1-12.
+
+[3] World Health Organization. (2021). Suicide. Retrieved from https://www.who.int/news-room/fact-sheets/detail/suicide
+
+[4] Li, T. M. H., Chen, J., Law, F. O. C., Li, C., Chan, N. Y., Chan, J. W. Y., Chau, S. W. H., Liu, Y., Li, S. X., Zhang, J., Leung, K., & Wing, Y. (2023). Detection of suicidal ideation in clinical interviews for depression using natural language processing and machine learning: Cross-sectional study. JMIR Medical Informatics, 11, e50221. https://doi.org/10.2196/50221
+
+[5] Tadesse, M. M., Lin, H., Xu, B., & Yang, L. (2019). Detection of depression-related posts in Reddit social media forum. IEEE Access, 7, 44883–44893. https://doi.org/10.1109/access.2019.2909180
+
+[6] Benton, A., Mitchell, M., & Hovy, D. (2017). Multi-task learning for mental health using social media text. Proceedings of the 15th Conference of the EACL, 152–162. https://doi.org/10.48550/arXiv.1712.03538
+
+[7] Seah, J. H. K., & Shim, K. J. (2018). Data mining approach to the detection of suicide in social media: A case study of Singapore. 2018 IEEE International Conference on Big Data (Big Data), Seattle, WA, December 10-13: Proceedings, 5442-5444. https://doi.org/10.1109/BigData.2018.8622528 
+
+[8] Reddit Dataset (r/Depression and r/SuicideWatch). Retrieved from https://www.kaggle.com/datasets/xavrig/reddit-dataset-rdepression-and-rsuicidewatch
+
+[9] Depression Reddit Cleaned Dataset. Retrieved from https://www.kaggle.com/datasets/infamouscoder/depression-reddit-cleaned
+
+[10] Suicide and Depression Detection Dataset. Retrieved from https://huggingface.co/datasets/joshyii/suicide_depression_detection
+
+[11] Reddit Conversations Dataset. Retrieved from https://www.kaggle.com/datasets/jerryqu/reddit-conversations
+
+[12] Lukasgarbas. (n.d.). nlp-text-emotion/data/datasets/dailydialog.csv at master · lukasgarbas/nlp-text-emotion. GitHub. Retrieved from https://github.com/lukasgarbas/nlp-text-emotion/blob/master/data/datasets/dailydialog.csv 
+
+[13] Devlin, J., Chang, M., Lee, K., & Toutanova, K. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. arXiv (Cornell University). https://doi.org/10.48550/arxiv.1810.04805 
+
 
 # CONTACT
 - **Name:** Burak Çetin
